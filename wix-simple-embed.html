@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Rankings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            font-size: 0.9rem;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-box input {
+            flex: 1;
+            border-radius: 20px 0 0 20px;
+        }
+
+        .search-box button {
+            border-radius: 0 20px 20px 0;
+            min-width: 50px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .pagination button:hover {
+            background: #f8f9fa;
+        }
+
+        .pagination button.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .rank-1 { background: #ffd700; color: #333; }
+        .rank-2 { background: #c0c0c0; color: #333; }
+        .rank-3 { background: #cd7f32; color: white; }
+        .rank-other { background: #3498db; color: white; }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .card {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .table {
+                font-size: 0.8rem;
+                min-width: 600px;
+            }
+            
+            .table th,
+            .table td {
+                padding: 6px 4px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 页面标题 -->
+        <section class="card">
+            <h2><i class="fas fa-list-ol"></i> World University Ranking</h2>
+            <p>Explore the full list of top universities worldwide. Use the filters to find the institutions that best match your interests.</p>
+        </section>
+
+        <!-- 筛选表单 -->
+        <section class="card">
+            <h3><i class="fas fa-filter"></i> Filter Criteria</h3>
+            <form id="filterForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="search">Search University or Country</label>
+                        <div class="search-box">
+                            <input type="text" id="search" name="search" placeholder="Enter university name or country...">
+                            <button type="submit" class="btn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <select id="country" name="country" class="form-control">
+                            <option value="">All Countries</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="year">Year</label>
+                        <select id="year" name="year" class="form-control">
+                            <option value="2025" selected>2025</option>
+                            <option value="2024">2024</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sortBy">Sort By</label>
+                        <select id="sortBy" name="sortBy" class="form-control">
+                            <option value="rank">By Rank</option>
+                            <option value="university">By University Name</option>
+                            <option value="country">By Country</option>
+                            <option value="total_score">By Total Score</option>
+                            <option value="research">By Research</option>
+                            <option value="reputation">By Reputation</option>
+                            <option value="employment">By Employment</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sortOrder">Order</label>
+                        <select id="sortOrder" name="sortOrder" class="form-control">
+                            <option value="ASC">Ascending</option>
+                            <option value="DESC">Descending</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="limit">Results per page</label>
+                        <select id="limit" name="limit" class="form-control">
+                            <option value="10">10</option>
+                            <option value="20" selected>20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <button type="submit" class="btn">Apply Filters</button>
+                        <button type="button" id="resetFilters" class="btn btn-secondary">Reset Filters</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <!-- 数据表格 -->
+        <section class="card">
+            <div class="table-header">
+                <h2><i class="fas fa-table"></i> Rankings Table</h2>
+            </div>
+            
+            <div id="tableContent">
+                <div id="resultCount" style="margin-bottom: 1rem; text-align: center; color: #666;"></div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>University</th>
+                                <th>Country</th>
+                                <th>Research</th>
+                                <th>Reputation</th>
+                                <th>Employment</th>
+                                <th>International</th>
+                                <th>Total Score</th>
+                                <th>Star Rating</th>
+                                <th>Year</th>
+                            </tr>
+                        </thead>
+                        <tbody id="universitiesTable">
+                            <!-- Data will be loaded dynamically via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 分页控件 -->
+            <div id="pagination" class="pagination">
+                <!-- Pagination controls will be inserted here -->
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 静态大学排名数据
+        const UNIVERSITY_DATA = {
+            "2025": [
+                {
+                    "rank": 1,
+                    "university": "Massachusetts Institute of Technology (MIT)",
+                    "country": "United States",
+                    "research": 95.2,
+                    "reputation": 98.5,
+                    "employment": 96.8,
+                    "international": 92.1,
+                    "total_score": 95.7,
+                    "star_rating": 5,
+                    "year": "2025"
+                },
+                {
+                    "rank": 2,
+                    "university": "Stanford University",
+                    "country": "United States",
+                    "research": 94.8,
+                    "reputation": 97.2,
+                    "employment": 95.9,
+                    "international": 90.5,
+                    "total_score": 94.6,
+                    "star_rating": 5,
+                    "year": "2025"
+                },
+                {
+                    "rank": 3,
+                    "university": "Harvard University",
+                    "country": "United States",
+                    "research": 93.5,
+                    "reputation": 99.1,
+                    "employment": 97.2,
+                    "international": 88.9,
+                    "total_score": 94.2,
+                    "star_rating": 5,
+                    "year": "2025"
+                },
+                {
+                    "rank": 4,
+                    "university": "University of Oxford",
+                    "country": "United Kingdom",
+                    "research": 92.8,
+                    "reputation": 96.7,
+                    "employment": 94.1,
+                    "international": 91.3,
+                    "total_score": 93.7,
+                    "star_rating": 5,
+                    "year": "2025"
+                },
+                {
+                    "rank": 5,
+                    "university": "University of Cambridge",
+                    "country": "United Kingdom",
+                    "research": 92.1,
+                    "reputation": 95.8,
+                    "employment": 93.5,
+                    "international": 90.2,
+                    "total_score": 92.9,
+                    "star_rating": 5,
+                    "year": "2025"
+                },
+                {
+                    "rank": 6,
+                    "university": "California Institute of Technology (Caltech)",
+                    "country": "United States",
+                    "research": 94.2,
+                    "reputation": 93.4,
+                    "employment": 92.8,
+                    "international": 87.6,
+                    "total_score": 92.0,
+                    "star_rating": 5,
+                    "year": "2025"
+                },
+                {
+                    "rank": 7,
+                    "university": "ETH Zurich",
+                    "country": "Switzerland",
+                    "research": 91.5,
+                    "reputation": 92.1,
+                    "employment": 91.7,
+                    "international": 94.8,
+                    "total_score": 92.5,
+                    "star_rating": 5,
+                    "year": "2025"
+                },
+                {
+                    "rank": 8,
+                    "university": "University of California, Berkeley",
+                    "country": "United States",
+                    "research": 91.8,
+                    "reputation": 93.7,
+                    "employment": 90.9,
+                    "international": 89.3,
+                    "total_score": 91.4,
+                    "star_rating": 5,
+                    "year": "2025"
+                },
+                {
+                    "rank": 9,
+                    "university": "Imperial College London",
+                    "country": "United Kingdom",
+                    "research": 90.9,
+                    "reputation": 91.8,
+                    "employment": 92.1,
+                    "international": 93.2,
+                    "total_score": 92.0,
+                    "star_rating": 5,
+                    "year": "2025"
+                },
+                {
+                    "rank": 10,
+                    "university": "University of Chicago",
+                    "country": "United States",
+                    "research": 89.7,
+                    "reputation": 94.2,
+                    "employment": 91.5,
+                    "international": 86.4,
+                    "total_score": 90.5,
+                    "star_rating": 5,
+                    "year": "2025"
+                }
+            ],
+            "2024": [
+                {
+                    "rank": 1,
+                    "university": "Massachusetts Institute of Technology (MIT)",
+                    "country": "United States",
+                    "research": 94.8,
+                    "reputation": 98.2,
+                    "employment": 96.5,
+                    "international": 91.8,
+                    "total_score": 95.3,
+                    "star_rating": 5,
+                    "year": "2024"
+                },
+                {
+                    "rank": 2,
+                    "university": "Stanford University",
+                    "country": "United States",
+                    "research": 94.2,
+                    "reputation": 96.9,
+                    "employment": 95.6,
+                    "international": 90.1,
+                    "total_score": 94.2,
+                    "star_rating": 5,
+                    "year": "2024"
+                },
+                {
+                    "rank": 3,
+                    "university": "Harvard University",
+                    "country": "United States",
+                    "research": 93.1,
+                    "reputation": 98.8,
+                    "employment": 96.9,
+                    "international": 88.5,
+                    "total_score": 94.3,
+                    "star_rating": 5,
+                    "year": "2024"
+                },
+                {
+                    "rank": 4,
+                    "university": "University of Oxford",
+                    "country": "United Kingdom",
+                    "research": 92.3,
+                    "reputation": 96.4,
+                    "employment": 93.8,
+                    "international": 91.0,
+                    "total_score": 93.4,
+                    "star_rating": 5,
+                    "year": "2024"
+                },
+                {
+                    "rank": 5,
+                    "university": "University of Cambridge",
+                    "country": "United Kingdom",
+                    "research": 91.7,
+                    "reputation": 95.5,
+                    "employment": 93.2,
+                    "international": 89.9,
+                    "total_score": 92.6,
+                    "star_rating": 5,
+                    "year": "2024"
+                }
+            ]
+        };
+
+        // 全局变量
+        let currentPage = 1;
+        let currentFilters = {
+            page: 1,
+            limit: 20,
+            country: '',
+            year: '2025',
+            search: '',
+            sortBy: 'rank',
+            sortOrder: 'ASC'
+        };
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePage();
+            loadFilterOptions();
+            loadUniversities();
+            
+            // 绑定事件监听器
+            document.getElementById('filterForm').addEventListener('submit', handleFilterSubmit);
+            document.getElementById('resetFilters').addEventListener('click', resetFilters);
+        });
+
+        // 初始化页面
+        function initializePage() {
+            // 从URL参数中恢复筛选条件
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('page')) currentFilters.page = parseInt(urlParams.get('page'));
+            if (urlParams.has('limit')) currentFilters.limit = parseInt(urlParams.get('limit'));
+            if (urlParams.has('country')) currentFilters.country = urlParams.get('country');
+            if (urlParams.has('year')) currentFilters.year = urlParams.get('year');
+            if (urlParams.has('search')) currentFilters.search = urlParams.get('search');
+            if (urlParams.has('sortBy')) currentFilters.sortBy = urlParams.get('sortBy');
+            if (urlParams.has('sortOrder')) currentFilters.sortOrder = urlParams.get('sortOrder');
+            
+            // 如果没有指定年份，默认使用2025
+            if (!currentFilters.year) {
+                currentFilters.year = '2025';
+            }
+            
+            // 更新表单值
+            updateFormValues();
+        }
+
+        // 更新表单值
+        function updateFormValues() {
+            document.getElementById('search').value = currentFilters.search;
+            document.getElementById('country').value = currentFilters.country;
+            document.getElementById('year').value = currentFilters.year;
+            document.getElementById('sortBy').value = currentFilters.sortBy;
+            document.getElementById('sortOrder').value = currentFilters.sortOrder;
+            document.getElementById('limit').value = currentFilters.limit;
+        }
+
+        // 获取所有国家列表
+        function getAllCountries() {
+            const countries = new Set();
+            Object.values(UNIVERSITY_DATA).forEach(yearData => {
+                yearData.forEach(uni => {
+                    countries.add(uni.country);
+                });
+            });
+            return Array.from(countries).sort();
+        }
+
+        // 加载筛选选项
+        function loadFilterOptions() {
+            // 加载国家列表
+            const countries = getAllCountries();
+            const countrySelect = document.getElementById('country');
+            countries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                countrySelect.appendChild(option);
+            });
+            
+            // 加载完选项后，重新应用URL参数
+            updateFormValues();
+        }
+
+        // 处理筛选表单提交
+        function handleFilterSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            currentFilters = {
+                page: 1,
+                limit: parseInt(formData.get('limit')) || 20,
+                country: formData.get('country') || '',
+                year: formData.get('year') || '',
+                search: formData.get('search') || '',
+                sortBy: formData.get('sortBy') || 'rank',
+                sortOrder: formData.get('sortOrder') || 'ASC'
+            };
+            
+            // 更新URL
+            updateURL();
+            
+            // 重新加载数据
+            loadUniversities();
+        }
+
+        // 重置筛选条件
+        function resetFilters() {
+            currentFilters = {
+                page: 1,
+                limit: 20,
+                country: '',
+                year: '2025',
+                search: '',
+                sortBy: 'rank',
+                sortOrder: 'ASC'
+            };
+            
+            // 重置表单
+            document.getElementById('filterForm').reset();
+            
+            // 手动设置年份为2025
+            document.getElementById('year').value = '2025';
+            
+            // 更新URL
+            updateURL();
+            
+            // 重新加载数据
+            loadUniversities();
+        }
+
+        // 更新URL参数
+        function updateURL() {
+            const url = new URL(window.location);
+            Object.keys(currentFilters).forEach(key => {
+                if (currentFilters[key]) {
+                    url.searchParams.set(key, currentFilters[key]);
+                } else {
+                    url.searchParams.delete(key);
+                }
+            });
+            window.history.pushState({}, '', url);
+        }
+
+        // 筛选大学数据
+        function filterUniversities(filters) {
+            let data = UNIVERSITY_DATA[filters.year] || UNIVERSITY_DATA["2025"];
+            
+            // 按国家筛选
+            if (filters.country) {
+                data = data.filter(uni => uni.country === filters.country);
+            }
+            
+            // 按搜索词筛选
+            if (filters.search) {
+                const searchTerm = filters.search.toLowerCase();
+                data = data.filter(uni => 
+                    uni.university.toLowerCase().includes(searchTerm) ||
+                    uni.country.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // 排序
+            data.sort((a, b) => {
+                let aValue, bValue;
+                
+                switch (filters.sortBy) {
+                    case 'university':
+                        aValue = a.university;
+                        bValue = b.university;
+                        break;
+                    case 'country':
+                        aValue = a.country;
+                        bValue = b.country;
+                        break;
+                    case 'research':
+                        aValue = a.research;
+                        bValue = b.research;
+                        break;
+                    case 'reputation':
+                        aValue = a.reputation;
+                        bValue = b.reputation;
+                        break;
+                    case 'employment':
+                        aValue = a.employment;
+                        bValue = b.employment;
+                        break;
+                    case 'total_score':
+                        aValue = a.total_score;
+                        bValue = b.total_score;
+                        break;
+                    default:
+                        aValue = a.rank;
+                        bValue = b.rank;
+                }
+                
+                if (filters.sortOrder === 'DESC') {
+                    return bValue > aValue ? 1 : -1;
+                } else {
+                    return aValue > bValue ? 1 : -1;
+                }
+            });
+            
+            // 分页
+            const startIndex = (filters.page - 1) * filters.limit;
+            const endIndex = startIndex + filters.limit;
+            const paginatedData = data.slice(startIndex, endIndex);
+            
+            return {
+                universities: paginatedData,
+                pagination: {
+                    currentPage: filters.page,
+                    totalPages: Math.ceil(data.length / filters.limit),
+                    totalResults: data.length,
+                    startIndex: startIndex,
+                    endIndex: Math.min(endIndex, data.length),
+                    limit: filters.limit
+                }
+            };
+        }
+
+        // 加载大学数据
+        function loadUniversities() {
+            try {
+                const data = filterUniversities(currentFilters);
+                displayUniversities(data.universities);
+                displayPagination(data.pagination);
+                updateResultCount(data.pagination);
+            } catch (error) {
+                console.error('加载大学数据失败:', error);
+                showError('加载数据失败，请稍后重试');
+            }
+        }
+
+        // 显示大学数据
+        function displayUniversities(universities) {
+            const tbody = document.getElementById('universitiesTable');
+            tbody.innerHTML = '';
+            
+            if (universities.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 2rem;">No matching universities found</td></tr>';
+                return;
+            }
+            
+            universities.forEach(uni => {
+                const row = document.createElement('tr');
+                row.className = 'fade-in';
+                
+                const rankClass = uni.rank <= 3 ? `rank-${uni.rank}` : 'rank-other';
+                
+                row.innerHTML = `
+                    <td>
+                        <span class="rank-badge ${rankClass}">${uni.rank}</span>
+                    </td>
+                    <td><strong>${uni.university}</strong></td>
+                    <td>${uni.country}</td>
+                    <td>${uni.research.toFixed(1)}</td>
+                    <td>${uni.reputation.toFixed(1)}</td>
+                    <td>${uni.employment.toFixed(1)}</td>
+                    <td>${uni.international.toFixed(1)}</td>
+                    <td><strong>${uni.total_score.toFixed(1)}</strong></td>
+                    <td>${'★'.repeat(uni.star_rating)}</td>
+                    <td>${uni.year}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // 显示分页控件
+        function displayPagination(pagination) {
+            const paginationContainer = document.getElementById('pagination');
+            paginationContainer.innerHTML = '';
+            
+            if (pagination.totalPages <= 1) return;
+            
+            // 上一页按钮
+            if (pagination.currentPage > 1) {
+                const prevButton = document.createElement('button');
+                prevButton.textContent = '← Previous';
+                prevButton.onclick = () => changePage(pagination.currentPage - 1);
+                paginationContainer.appendChild(prevButton);
+            }
+            
+            // 页码按钮
+            const startPage = Math.max(1, pagination.currentPage - 2);
+            const endPage = Math.min(pagination.totalPages, pagination.currentPage + 2);
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.className = i === pagination.currentPage ? 'active' : '';
+                pageButton.onclick = () => changePage(i);
+                paginationContainer.appendChild(pageButton);
+            }
+            
+            // 下一页按钮
+            if (pagination.currentPage < pagination.totalPages) {
+                const nextButton = document.createElement('button');
+                nextButton.textContent = 'Next →';
+                nextButton.onclick = () => changePage(pagination.currentPage + 1);
+                paginationContainer.appendChild(nextButton);
+            }
+        }
+
+        // 切换页面
+        function changePage(newPage) {
+            currentFilters.page = newPage;
+            updateURL();
+            loadUniversities();
+        }
+
+        // 更新结果计数
+        function updateResultCount(pagination) {
+            const resultCount = document.getElementById('resultCount');
+            resultCount.textContent = `Showing ${pagination.startIndex + 1} to ${pagination.endIndex} of ${pagination.totalResults} universities`;
+        }
+
+        // 显示错误信息
+        function showError(message) {
+            const tbody = document.getElementById('universitiesTable');
+            tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 2rem; color: red;">${message}</td></tr>`;
+        }
+    </script>
+</body>
+</html> 

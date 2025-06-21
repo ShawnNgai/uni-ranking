@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barentsz DataLab - Uni-Ranking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=1.7">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html" class="barentsz-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-primary">Barentsz</span>
+                        <span class="logo-secondary">Uni-Ranking</span>
+                    </div>
+                </a>
+            </div>
+            <nav>
+                <button class="nav-toggle" aria-label="toggle navigation">
+                    <span class="hamburger"></span>
+                </button>
+                <ul>
+                    <li><a href="index.html">About</a></li>
+                    <li class="dropdown">
+                        <a href="rankings.html">World University Ranking <i class="fas fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="rankings.html?year=2025">2025 Ranking</a></li>
+                            <li><a href="rankings.html?year=2024">2024 Ranking</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="methodology.html">Methodology</a></li>
+                    <li><a href="rating-system.html" class="active">Barentsz DataLab</a></li>
+                    <li><a href="media.html">News & Insights</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 页面标题 -->
+        <section class="hero-section card">
+            <h2><i class="fas fa-star-half-alt"></i> Barentsz DataLab</h2>
+        </section>
+
+        <!-- Barentsz DataLab介绍 -->
+        <section class="card">
+            <h2><i class="fas fa-info-circle"></i> About Barentsz DataLab</h2>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 2rem;">
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 2rem; border-radius: 15px; border-left: 4px solid #667eea;">
+                    <h3 style="color: #667eea; margin-bottom: 1rem;"><i class="fas fa-chart-line"></i> Analytics Nucleus</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.7; color: #333;">Barentsz DataLab is the analytics nucleus of our platform, trusted by dozens of Nasdaq-, NYSE-, and HKEX-listed corporations as well as leading financial institutions for objective, data-driven intelligence.</p>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 2rem; border-radius: 15px; border-left: 4px solid #667eea;">
+                    <h3 style="color: #667eea; margin-bottom: 1rem;"><i class="fas fa-users"></i> Research Fellows</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.7; color: #333;">Supported by a team of Barentsz Research Fellows, the Lab merges deep sector expertise with advanced quantitative techniques, delivering high-impact insights that shape strategic decisions and academic discourse alike.</p>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 2rem; border-radius: 15px; border-left: 4px solid #667eea;">
+                    <h3 style="color: #667eea; margin-bottom: 1rem;"><i class="fas fa-cogs"></i> Uni-Ranking Data Engine</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.7; color: #333;">At its core lies the proprietary Uni-Ranking Data Engine, purpose-built by Barentsz DataLab to harvest, cleanse, and score vast information streams—producing the rigorous metrics that power our university rankings.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Uni-Ranking. All Rights Reserved.</p>
+        </div>
+    </footer>
+    <script src="js/nav.js"></script>
+</body>
+</html> 

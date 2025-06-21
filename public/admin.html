@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Uni-Ranking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=1.6">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html" class="barentsz-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-primary">Barentsz</span>
+                        <span class="logo-secondary">Uni-Ranking</span>
+                    </div>
+                </a>
+            </div>
+            <nav>
+                <button class="nav-toggle" aria-label="toggle navigation">
+                    <span class="hamburger"></span>
+                </button>
+                <ul>
+                    <li><a href="index.html">About Us</a></li>
+                    <li><a href="rankings.html">World University Ranking</a></li>
+                    <li><a href="methodology.html">Methodology</a></li>
+                    <li><a href="rating-system.html">Barentsz DataLab</a></li>
+                    <li><a href="media.html">News & Insights</a></li>
+                    <li><a href="/admin" class="admin-link active">Admin</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-section card">
+            <h2><i class="fas fa-cogs"></i> Admin</h2>
+            <p>Use this page to manage the university rankings data. You can import new data, clear existing data, and download a data template.</p>
+        </section>
+
+        <div class="admin-grid">
+            <section class="card">
+                <h2><i class="fas fa-upload"></i> Import Data</h2>
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label for="file">Select a CSV or XLSX file:</label>
+                        <input type="file" id="file" name="file" accept=".csv, .xlsx" required class="form-control">
+                    </div>
+                    <button type="submit" class="btn">Upload and Import</button>
+                    <a href="/api/template" class="btn btn-secondary">Download Template</a>
+                </form>
+                <div id="importStatus" class="import-status"></div>
+                
+                <hr style="margin: 2rem 0;">
+                
+                <h3><i class="fas fa-cloud-download-alt"></i> Import from Google Sheet</h3>
+                <div class="form-group">
+                    <button type="button" id="import2024Btn" class="btn btn-primary">Import 2024 Data</button>
+                    <button type="button" id="import2025Btn" class="btn btn-primary">Import 2025 Data</button>
+                </div>
+                <div id="sheetImportStatus" class="import-status"></div>
+            </section>
+
+            <section class="card">
+                <h2><i class="fas fa-info-circle"></i> Import Instructions</h2>
+                <div class="instructions">
+                    <p>The uploaded file must be in CSV or XLSX format. The column headers are case-insensitive.</p>
+                    <h3>Required Fields</h3>
+                    <ul>
+                        <li><code>University</code> - University Name</li>
+                        <li><code>Country</code> - Country</li>
+                        <li><code>Total_Score</code> - Total Score</li>
+                    </ul>
+                    
+                    <h3>Optional Fields</h3>
+                    <ul>
+                        <li><code>Rank</code> - Ranking</li>
+                        <li><code>Research</code> - Research Score</li>
+                        <li><code>Reputation</code> - Reputation Score</li>
+                        <li><code>Employment</code> - Employment Score</li>
+                        <li><code>International</code> - Internationalization Score</li>
+                        <li><code>Star_Rating</code> - Star Rating</li>
+                        <li><code>year</code> - Year</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2><i class="fas fa-trash-alt"></i> Clear Data</h2>
+                <p>This action will permanently delete all university data from the database. This cannot be undone.</p>
+                <button id="clearDataBtn" class="btn btn-danger">Clear All Data</button>
+            </section>
+        </div>
+
+        <section class="card">
+            <h2><i class="fas fa-table"></i> Data Preview</h2>
+            <div id="dataPreview" class="table-container">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+            <div class="text-center" style="margin-top: 1rem;">
+                <button id="exportAllData" class="btn btn-secondary"><i class="fas fa-download"></i> Export All Data to CSV</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Uni-Ranking. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/admin.js"></script>
+    <script src="js/nav.js"></script>
+</body>
+</html> 

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Uni-Ranking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=1.7">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html" class="barentsz-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-primary">Barentsz</span>
+                        <span class="logo-secondary">Uni-Ranking</span>
+                    </div>
+                </a>
+            </div>
+            <nav>
+                <button class="nav-toggle" aria-label="toggle navigation">
+                    <span class="hamburger"></span>
+                </button>
+                <ul>
+                    <li><a href="index.html" class="active">About</a></li>
+                    <li class="dropdown">
+                        <a href="rankings.html">World University Ranking <i class="fas fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="rankings.html?year=2025">2025 Ranking</a></li>
+                            <li><a href="rankings.html?year=2024">2024 Ranking</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="methodology.html">Methodology</a></li>
+                    <li><a href="rating-system.html">Barentsz DataLab</a></li>
+                    <li><a href="media.html">News & Insights</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 主页介绍 -->
+        <section class="hero-section card">
+            <h2>Welcome to Barentsz Uni-Ranking</h2>
+            <p class="hero-subtitle">– the definitive global university insights platform. Powered by our proprietary DataLab analytics</p>
+        </section>
+
+        <!-- 最新排名预览 -->
+        <section class="card">
+            <h2><i class="fas fa-trophy"></i> 2025 World University Ranking</h2>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>University</th>
+                            <th>Country</th>
+                            <th>Total Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="top-universities">
+                        <!-- Data will be loaded dynamically via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center" style="margin-top: 2rem;">
+                <a href="rankings.html?year=2025" class="btn">View Full Rankings</a>
+            </div>
+        </section>
+
+        <!-- 评估指标 -->
+        <section class="card">
+            <h2><i class="fas fa-chart-bar"></i> Evaluation Metrics</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <div>
+                    <h4><i class="fas fa-flask"></i> Research</h4>
+                    <p>Based on research papers, citations, and international collaborations</p>
+                </div>
+                <div>
+                    <h4><i class="fas fa-star"></i> Reputation</h4>
+                    <p>Based on reputation surveys from academics and employers</p>
+                </div>
+                <div>
+                    <h4><i class="fas fa-briefcase"></i> Employment</h4>
+                    <p>Based on graduate employment rates and career achievements</p>
+                </div>
+                <div>
+                    <h4><i class="fas fa-globe-americas"></i> Internationalization</h4>
+                    <p>Based on the proportion of international students and faculty</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Uni-Ranking. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/nav.js"></script>
+    <script src="js/admin-access.js"></script>
+</body>
+</html> 
