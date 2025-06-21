@@ -2,8 +2,12 @@
   "version": 2,
   "builds": [
     {
-      "src": "public/**",
+      "src": "public/**/*",
       "use": "@vercel/static"
+    },
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -18,11 +22,23 @@
   ],
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/public/$1"
     }
   ],
-  "env": {
-    "NODE_ENV": "production"
+  "functions": {
+    "api/universities.js": {
+      "maxDuration": 10
+    },
+    "api/countries.js": {
+      "maxDuration": 10
+    },
+    "api/hello.js": {
+      "maxDuration": 10
+    }
   }
 } 

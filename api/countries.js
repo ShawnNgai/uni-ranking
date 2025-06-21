@@ -23,7 +23,9 @@ const countries = [
 ];
 
 // Vercel API处理函数
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
+    console.log('Countries API called:', req.method, req.url);
+    
     // 设置CORS头
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -35,9 +37,10 @@ module.exports = async (req, res) => {
     }
     
     try {
+        console.log('Returning countries:', countries);
         res.status(200).json(countries);
     } catch (error) {
-        console.error('API Error:', error);
+        console.error('Countries API Error:', error);
         res.status(500).json({ error: 'Internal Server Error', details: error.message });
     }
-}; 
+} 
