@@ -1,102 +1,77 @@
-// 使用SQLite数据库获取完整大学数据
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
-
-// 数据库路径
-const dbPath = path.join(__dirname, '../database/rankings.db');
+// 使用真实大学数据 - 从数据库导出的静态数据
+import { REAL_UNIVERSITIES_DATA } from '../public/js/real-data.js';
 
 // 获取大学数据
 function getUniversities(query) {
     return new Promise((resolve, reject) => {
-        const db = new sqlite3.Database(dbPath, (err) => {
-            if (err) {
-                console.error('数据库连接错误:', err);
-                reject(err);
-                return;
-            }
-        });
-
         try {
-            // 构建查询条件
-            let whereConditions = [];
-            let params = [];
-
+            console.log('使用真实数据查询:', query);
+            
+            let filteredData = [...REAL_UNIVERSITIES_DATA];
+            
+            // 筛选条件
             if (query.country) {
-                whereConditions.push('country LIKE ?');
-                params.push(`%${query.country}%`);
+                filteredData = filteredData.filter(uni => 
+                    uni.country.toLowerCase().includes(query.country.toLowerCase())
+                );
             }
-
+            
             if (query.year) {
-                whereConditions.push('year = ?');
-                params.push(query.year);
+                filteredData = filteredData.filter(uni => uni.year == query.year);
             }
-
+            
             if (query.search) {
-                whereConditions.push('(university LIKE ? OR country LIKE ?)');
-                params.push(`%${query.search}%`, `%${query.search}%`);
+                const searchTerm = query.search.toLowerCase();
+                filteredData = filteredData.filter(uni => 
+                    uni.university.toLowerCase().includes(searchTerm) ||
+                    uni.country.toLowerCase().includes(searchTerm)
+                );
             }
-
-            const whereClause = whereConditions.length > 0 ? 'WHERE ' + whereConditions.join(' AND ') : '';
-
+            
             // 排序
             const sortBy = query.sortBy || 'rank';
             const sortOrder = query.sortOrder || 'ASC';
-            const orderClause = `ORDER BY ${sortBy} ${sortOrder}`;
-
+            
+            filteredData.sort((a, b) => {
+                let aVal = a[sortBy];
+                let bVal = b[sortBy];
+                
+                if (typeof aVal === 'string') {
+                    aVal = aVal.toLowerCase();
+                    bVal = bVal.toLowerCase();
+                }
+                
+                if (sortOrder === 'ASC') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+            
             // 分页
             const limit = parseInt(query.limit) || 20;
             const page = parseInt(query.page) || 1;
             const offset = (page - 1) * limit;
-
-            // 获取总数
-            const countQuery = `SELECT COUNT(*) as total FROM universities ${whereClause}`;
             
-            db.get(countQuery, params, (err, countResult) => {
-                if (err) {
-                    console.error('获取总数错误:', err);
-                    reject(err);
-                    return;
+            const total = filteredData.length;
+            const totalPages = Math.ceil(total / limit);
+            const paginatedData = filteredData.slice(offset, offset + limit);
+            
+            console.log(`返回 ${paginatedData.length} 条数据，总计 ${total} 条`);
+            
+            resolve({
+                universities: paginatedData,
+                pagination: {
+                    page,
+                    limit,
+                    total,
+                    totalPages
                 }
-
-                const total = countResult.total;
-
-                // 获取分页数据
-                const dataQuery = `
-                    SELECT * FROM universities 
-                    ${whereClause} 
-                    ${orderClause} 
-                    LIMIT ? OFFSET ?
-                `;
-
-                const queryParams = [...params, limit, offset];
-
-                db.all(dataQuery, queryParams, (err, rows) => {
-                    if (err) {
-                        console.error('获取数据错误:', err);
-                        reject(err);
-                        return;
-                    }
-
-                    const totalPages = Math.ceil(total / limit);
-
-                    resolve({
-                        universities: rows,
-                        pagination: {
-                            page,
-                            limit,
-                            total,
-                            totalPages
-                        }
-                    });
-
-                    db.close();
-                });
             });
-
+            
         } catch (error) {
             console.error('查询执行错误:', error);
             reject(error);
-            db.close();
         }
     });
 }

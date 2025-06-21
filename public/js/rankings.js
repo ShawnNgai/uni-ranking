@@ -55,11 +55,11 @@ function updateFormValues() {
     document.getElementById('limit').value = currentFilters.limit;
 }
 
-// 加载筛选选项 - 使用静态数据
+// 加载筛选选项 - 使用真实数据
 function loadFilterOptions() {
     try {
-        // 使用静态国家列表
-        const countries = getCountriesData();
+        // 使用真实国家列表
+        const countries = getRealCountriesData();
         const countrySelect = document.getElementById('country');
         countries.forEach(country => {
             const option = document.createElement('option');
@@ -153,13 +153,13 @@ function updateURL() {
     window.history.pushState({}, '', url);
 }
 
-// 加载大学数据 - 使用静态数据
+// 加载大学数据 - 使用真实数据
 function loadUniversities() {
     showLoading(true);
     
     try {
-        // 使用静态数据函数
-        const data = getUniversitiesData(currentFilters);
+        // 使用真实数据函数
+        const data = getRealUniversitiesData(currentFilters);
         
         displayUniversities(data.universities);
         displayPagination(data.pagination);

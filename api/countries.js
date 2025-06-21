@@ -1,42 +1,18 @@
-// 从数据库获取国家列表
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
-
-// 数据库路径
-const dbPath = path.join(__dirname, '../database/rankings.db');
+// 使用真实国家数据 - 从数据库导出的静态数据
+import { REAL_COUNTRIES } from '../public/js/real-data.js';
 
 // 获取国家列表
 function getCountries() {
     return new Promise((resolve, reject) => {
-        const db = new sqlite3.Database(dbPath, (err) => {
-            if (err) {
-                console.error('数据库连接错误:', err);
-                reject(err);
-                return;
-            }
-        });
-
         try {
-            const query = 'SELECT DISTINCT country FROM universities ORDER BY country';
+            console.log('获取真实国家列表');
+            console.log('国家数量:', REAL_COUNTRIES.length);
             
-            db.all(query, [], (err, rows) => {
-                if (err) {
-                    console.error('获取国家列表错误:', err);
-                    reject(err);
-                    return;
-                }
-
-                const countries = rows.map(row => row.country);
-                console.log('获取到', countries.length, '个国家');
-                
-                resolve(countries);
-                db.close();
-            });
-
+            resolve(REAL_COUNTRIES);
+            
         } catch (error) {
-            console.error('查询执行错误:', error);
+            console.error('获取国家列表错误:', error);
             reject(error);
-            db.close();
         }
     });
 }
