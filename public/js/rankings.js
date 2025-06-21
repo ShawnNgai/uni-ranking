@@ -10,6 +10,9 @@ let currentFilters = {
     sortOrder: 'ASC'
 };
 
+// 配置API基础URL
+const API_BASE_URL = ''; // 使用相对路径，自动适配部署域名
+
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
     initializePage();
@@ -52,11 +55,12 @@ function updateFormValues() {
     document.getElementById('limit').value = currentFilters.limit;
 }
 
-// 加载筛选选项 - 使用静态数据
-function loadFilterOptions() {
+// 加载筛选选项 - 使用API获取
+async function loadFilterOptions() {
     try {
-        // 使用静态国家列表
-        const countries = getStaticCountries();
+        // 加载国家列表
+        const countriesResponse = await fetch(`${API_BASE_URL}/api/countries`);
+        const countries = await countriesResponse.json();
         const countrySelect = document.getElementById('country');
         countries.forEach(country => {
             const option = document.createElement('option');
@@ -65,7 +69,7 @@ function loadFilterOptions() {
             countrySelect.appendChild(option);
         });
         
-        // 加载年份列表 - 只显示2025和2024年
+        // 加载年份列表 - 从数据库获取可用年份
         const yearSelect = document.getElementById('year');
         yearSelect.innerHTML = ''; // 清空现有选项
         
@@ -150,18 +154,22 @@ function updateURL() {
     window.history.pushState({}, '', url);
 }
 
-// 加载大学数据 - 使用静态数据
-function loadUniversities() {
+// 加载大学数据 - 使用API获取
+async function loadUniversities() {
     showLoading(true);
     
     try {
-        // 使用静态数据函数
-        const data = getStaticUniversities(currentFilters);
+        const queryParams = new URLSearchParams(currentFilters);
+        const response = await fetch(`${API_BASE_URL}/api/universities?${queryParams}`);
+        const data = await response.json();
         
-        displayUniversities(data.universities);
-        displayPagination(data.pagination);
-        updateResultCount(data.pagination);
-        
+        if (response.ok) {
+            displayUniversities(data.universities);
+            displayPagination(data.pagination);
+            updateResultCount(data.pagination);
+        } else {
+            throw new Error(data.error || '加载数据失败');
+        }
     } catch (error) {
         console.error('加载大学数据失败:', error);
         showError('加载数据失败，请稍后重试');

@@ -1,26 +1,45 @@
-// 使用内存数据，避免SQLite在Vercel环境中的问题
-const countries = [
-    "United States",
-    "United Kingdom", 
-    "Switzerland",
-    "Germany",
-    "Canada",
-    "Australia",
-    "Netherlands",
-    "Singapore",
-    "Japan",
-    "France",
-    "Sweden",
-    "Denmark",
-    "Norway",
-    "Finland",
-    "Austria",
-    "Belgium",
-    "Italy",
-    "Spain",
-    "South Korea",
-    "China"
-];
+// 从数据库获取国家列表
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
+
+// 数据库路径
+const dbPath = path.join(__dirname, '../database/rankings.db');
+
+// 获取国家列表
+function getCountries() {
+    return new Promise((resolve, reject) => {
+        const db = new sqlite3.Database(dbPath, (err) => {
+            if (err) {
+                console.error('数据库连接错误:', err);
+                reject(err);
+                return;
+            }
+        });
+
+        try {
+            const query = 'SELECT DISTINCT country FROM universities ORDER BY country';
+            
+            db.all(query, [], (err, rows) => {
+                if (err) {
+                    console.error('获取国家列表错误:', err);
+                    reject(err);
+                    return;
+                }
+
+                const countries = rows.map(row => row.country);
+                console.log('获取到', countries.length, '个国家');
+                
+                resolve(countries);
+                db.close();
+            });
+
+        } catch (error) {
+            console.error('查询执行错误:', error);
+            reject(error);
+            db.close();
+        }
+    });
+}
 
 // Vercel API处理函数
 export default async function handler(req, res) {
@@ -37,6 +56,7 @@ export default async function handler(req, res) {
     }
     
     try {
+        const countries = await getCountries();
         console.log('Returning countries:', countries);
         res.status(200).json(countries);
     } catch (error) {
