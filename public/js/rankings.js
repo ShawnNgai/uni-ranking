@@ -161,9 +161,9 @@ function loadUniversities() {
         // 使用真实数据函数
         const data = getRealUniversitiesData(currentFilters);
         
-        displayUniversities(data.universities);
-        displayPagination(data.pagination);
-        updateResultCount(data.pagination);
+            displayUniversities(data.universities);
+            displayPagination(data.pagination);
+            updateResultCount(data.pagination);
         
     } catch (error) {
         console.error('加载大学数据失败:', error);
