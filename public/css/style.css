@@ -821,6 +821,18 @@ main {
         margin: 0.5rem 0;
         overflow-x: auto;
     }
+
+    /* 移动端标题换行样式 */
+    .mobile-break {
+        display: block;
+        margin-top: 0.5rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .mobile-break {
+        display: inline;
+    }
 }
 
 @media (max-width: 480px) {
