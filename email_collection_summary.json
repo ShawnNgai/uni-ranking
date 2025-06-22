@@ -1,0 +1,63 @@
+{
+  "总处理大学数": 150,
+  "成功获取邮箱数": 7,
+  "成功率": "4.7%",
+  "成功获取邮箱的大学": [
+    {
+      "排名": 501,
+      "大学名称": "Liverpool John Moores University",
+      "国家": "United Kingdom",
+      "官方邮箱": "fetadmissions@ljmu.ac.uk",
+      "联系邮箱": "x3estudentgovernance@ljmu.ac.uk",
+      "网站": ""
+    },
+    {
+      "排名": 502,
+      "大学名称": "Nottingham Trent University",
+      "国家": "United Kingdom",
+      "官方邮箱": "international@ntu.ac.uk",
+      "联系邮箱": "victoria.fanning@ntu.ac.uk",
+      "网站": ""
+    },
+    {
+      "排名": 503,
+      "大学名称": "Politecnico di Bari",
+      "国家": "Italy",
+      "官方邮箱": "antonella.palermo@poliba.it",
+      "联系邮箱": "x3eprospective.students@unive.it",
+      "网站": ""
+    },
+    {
+      "排名": 504,
+      "大学名称": "Universita' degli Studi di Ferrara",
+      "国家": "Italy",
+      "官方邮箱": "international@unife.it",
+      "联系邮箱": "ortobotanico@unife.it",
+      "网站": ""
+    },
+    {
+      "排名": 505,
+      "大学名称": "University of Salamanca",
+      "国家": "Spain",
+      "官方邮箱": "english.studies.master@usal.es",
+      "联系邮箱": "erasmus-in@usal.es",
+      "网站": ""
+    },
+    {
+      "排名": 506,
+      "大学名称": "Technical University of Dortmund",
+      "国家": "Germany",
+      "官方邮箱": "spring@aru.ac.tz",
+      "联系邮箱": "studierendensekretariat@tu-dortmund.de",
+      "网站": ""
+    },
+    {
+      "排名": 507,
+      "大学名称": "Ewha Womans University",
+      "国家": "South Korea",
+      "官方邮箱": "x3eadmission@adm.korea.ac.kr",
+      "联系邮箱": "heejeongryu@unist.ac.kr",
+      "网站": ""
+    }
+  ]
+}

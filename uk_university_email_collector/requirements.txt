@@ -1,0 +1,4 @@
+aiohttp
+loguru
+email-validator
+beautifulsoup4 
