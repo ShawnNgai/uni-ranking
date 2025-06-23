@@ -53,31 +53,31 @@ function displayDefaultTopUniversities() {
             <td><span class="rank-badge rank-1">1</span></td>
             <td><strong>Massachusetts Institute of Technology</strong></td>
             <td>United States</td>
-            <td><strong>100.0</strong></td>
+            <td><strong>99.6</strong></td>
         </tr>
         <tr class="fade-in">
             <td><span class="rank-badge rank-2">2</span></td>
             <td><strong>Harvard University</strong></td>
             <td>United States</td>
-            <td><strong>99.8</strong></td>
+            <td><strong>99.46</strong></td>
         </tr>
         <tr class="fade-in">
             <td><span class="rank-badge rank-3">3</span></td>
             <td><strong>University of Oxford</strong></td>
             <td>United Kingdom</td>
-            <td><strong>99.5</strong></td>
+            <td><strong>99.31</strong></td>
         </tr>
         <tr class="fade-in">
             <td><span class="rank-badge rank-other">4</span></td>
             <td><strong>Stanford University</strong></td>
             <td>United States</td>
-            <td><strong>99.2</strong></td>
+            <td><strong>99.17</strong></td>
         </tr>
         <tr class="fade-in">
             <td><span class="rank-badge rank-other">5</span></td>
             <td><strong>University of Cambridge</strong></td>
             <td>United Kingdom</td>
-            <td><strong>98.9</strong></td>
+            <td><strong>99.03</strong></td>
         </tr>
     `;
 } 
