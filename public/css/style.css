@@ -10,6 +10,10 @@ body {
   line-height: 1.6;
   color: #333;
   background-color: #f8f9fa;
+  /* 移动端优化 */
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* 头部和导航栏 */
@@ -968,6 +972,20 @@ main {
     /* 表格内容优化 */
     .table td strong {
         font-size: 0.8rem;
+    }
+    
+    /* 移动端性能优化 */
+    .fade-in {
+        animation: none; /* 移动端禁用动画以提高性能 */
+    }
+    
+    /* 减少阴影效果以提高性能 */
+    .card {
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .header {
+        box-shadow: 0 1px 5px rgba(0,0,0,0.1);
     }
 }
 

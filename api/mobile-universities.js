@@ -1,26 +1,26 @@
-// 使用真实大学数据 - 从数据库导出的静态数据
-import { REAL_UNIVERSITIES_DATA } from '../public/js/real-data.js';
+// 移动端优化的大学API
+import { MOBILE_UNIVERSITIES_DATA } from '../public/js/mobile-data.js';
 
 // 内存缓存
 let cache = new Map();
-const CACHE_DURATION = 5 * 60 * 1000; // 5分钟缓存
+const CACHE_DURATION = 10 * 60 * 1000; // 10分钟缓存
 
-// 获取大学数据
-function getUniversities(query) {
+// 获取移动端大学数据
+function getMobileUniversities(query) {
     return new Promise((resolve, reject) => {
         try {
-            console.log('使用真实数据查询:', query);
+            console.log('移动端API查询:', query);
             
             // 检查缓存
             const cacheKey = JSON.stringify(query);
             const cached = cache.get(cacheKey);
             if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
-                console.log('返回缓存数据');
+                console.log('返回移动端缓存数据');
                 resolve(cached.data);
                 return;
             }
             
-            let filteredData = [...REAL_UNIVERSITIES_DATA];
+            let filteredData = [...MOBILE_UNIVERSITIES_DATA];
             
             // 筛选条件
             if (query.country) {
@@ -62,7 +62,7 @@ function getUniversities(query) {
             });
             
             // 分页 - 移动端优化
-            const limit = parseInt(query.limit) || 20;
+            const limit = parseInt(query.limit) || 10; // 移动端默认10条
             const page = parseInt(query.page) || 1;
             const offset = (page - 1) * limit;
             
@@ -70,24 +70,15 @@ function getUniversities(query) {
             const totalPages = Math.ceil(total / limit);
             const paginatedData = filteredData.slice(offset, offset + limit);
             
-            // 移动端优化：只返回必要字段
-            const optimizedData = paginatedData.map(uni => ({
-                id: uni.id,
-                rank: uni.rank,
-                university: uni.university,
-                country: uni.country,
-                total_score: uni.total_score,
-                year: uni.year
-            }));
-            
             const result = {
-                universities: optimizedData,
+                universities: paginatedData,
                 pagination: {
                     page,
                     limit,
                     total,
                     totalPages
-                }
+                },
+                mobile_optimized: true
             };
             
             // 缓存结果
@@ -96,12 +87,12 @@ function getUniversities(query) {
                 timestamp: Date.now()
             });
             
-            console.log(`返回 ${optimizedData.length} 条数据，总计 ${total} 条`);
+            console.log(`移动端API返回 ${paginatedData.length} 条数据，总计 ${total} 条`);
             
             resolve(result);
             
         } catch (error) {
-            console.error('查询执行错误:', error);
+            console.error('移动端API查询执行错误:', error);
             reject(error);
         }
     });
@@ -109,16 +100,16 @@ function getUniversities(query) {
 
 // Vercel API处理函数
 export default async function handler(req, res) {
-    console.log('Universities API called:', req.method, req.url);
+    console.log('Mobile Universities API called:', req.method, req.url);
     
     // 设置CORS头
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     
-    // 添加缓存控制头
-    res.setHeader('Cache-Control', 'public, max-age=300'); // 5分钟缓存
-    res.setHeader('ETag', `"${Date.now()}"`);
+    // 添加缓存控制头 - 移动端更长的缓存时间
+    res.setHeader('Cache-Control', 'public, max-age=600'); // 10分钟缓存
+    res.setHeader('ETag', `"mobile-${Date.now()}"`);
     
     // 处理OPTIONS请求
     if (req.method === 'OPTIONS') {
@@ -133,20 +124,20 @@ export default async function handler(req, res) {
     }
     
     try {
-        console.log('Processing request with query:', req.query);
+        console.log('Processing mobile request with query:', req.query);
         
         // 获取查询参数
         const query = req.query;
         
         // 获取数据
-        const result = await getUniversities(query);
+        const result = await getMobileUniversities(query);
         
-        console.log('Returning result with', result.universities.length, 'universities');
+        console.log('Mobile API returning result with', result.universities.length, 'universities');
         
         res.status(200).json(result);
         
     } catch (error) {
-        console.error('API Error:', error);
+        console.error('Mobile API Error:', error);
         res.status(500).json({ 
             error: 'Internal Server Error', 
             details: error.message,

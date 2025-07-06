@@ -3,10 +3,21 @@ document.addEventListener('DOMContentLoaded', function() {
     loadTopUniversities();
 });
 
+// 检测是否为移动设备
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+           window.innerWidth <= 768;
+}
+
 // 加载顶部大学排名
 async function loadTopUniversities() {
     try {
-        const response = await fetch('/api/universities?limit=5&sortBy=rank&sortOrder=ASC&year=2025');
+        const isMobile = isMobileDevice();
+        const apiEndpoint = isMobile ? '/api/mobile-universities' : '/api/universities';
+        
+        console.log(`使用${isMobile ? '移动端' : '桌面端'}API:`, apiEndpoint);
+        
+        const response = await fetch(`${apiEndpoint}?limit=5&sortBy=rank&sortOrder=ASC&year=2025`);
         const data = await response.json();
         
         if (response.ok) {
